@@ -1,0 +1,30 @@
+{
+  "name": "ai-code-review",
+  "displayName": "AI Code Review",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "activationEvents": [
+    "onCommand:aiCodeReview.run"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiCodeReview.run",
+        "title": "Run AI Code Review"
+      }
+    ]
+  },
+  "scripts": {
+  "compile": "tsc -p ./",
+  "watch": "tsc -watch -p ./",
+  "vscode:prepublish": "npm run compile"
+},
+
+  "devDependencies": {
+    "@types/vscode": "^1.109.0",
+    "typescript": "^5.9.3"
+  }
+}
