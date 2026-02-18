@@ -1,7 +1,18 @@
+import os
+from dotenv import load_dotenv
 import requests
 
+load_dotenv()
+
 SCALEDOWN_API_URL = "https://api.scaledown.xyz/compress/raw/"
-SCALEDOWN_API_KEY = "HrQT4walIl4AT3XFpM0Ed96P8pZ00vrzaO8dX2u0"
+SCALEDOWN_API_KEY = os.getenv("SCALEDOWN_API_KEY")
+
+if not SCALEDOWN_API_KEY:
+    raise RuntimeError(
+        "SCALEDOWN_API_KEY environment variable is not set. "
+        "Set it in a .env file or in the environment before running the app."
+    )
+
 
 def compress_code(code: str) -> str:
     payload = {
@@ -22,10 +33,14 @@ def compress_code(code: str) -> str:
         timeout=30
     )
     print("ScaleDown status:", response.status_code)
-    print("ScaleDown raw response:", response.json())
+    try:
+        raw = response.json()
+    except ValueError:
+        raw = response.text
+    print("ScaleDown raw response:", raw)
 
     response.raise_for_status()
-    data = response.json()
+    data = raw
     
     # Extract the compressed code from the response
     if isinstance(data, dict):
@@ -35,5 +50,5 @@ def compress_code(code: str) -> str:
                 return data[key]
         # If none found, return the JSON string representation
         return str(data)
-    
-    return str(data) 
+
+    return str(data)
